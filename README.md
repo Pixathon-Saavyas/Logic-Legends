@@ -1,24 +1,16 @@
 ﻿# Introduction
-The Logic Legends team presents a new usecase with the help of uAgents designed to solve the problem of wastage of water in farms due to inadeduate information available by the farmers. Usually a farm requires a certain amount of water on a regular basis that is predictable by certain factors such as crop type, farm size and gowth stage. The primary aim of this project is to assign the task of information gathering from different sources, deciding the water to be irrigated and controling the water irrigation system all by different agents.
+The Logic Legends team presents a new water management system powered by uAgents designed to solve the problem of wastage of water in farms due to inadeduate information available to the farmers. By leveraging advanced technology and data-driven decision-making, our system ensures optimal water usage for crops at every stage of growth.
 
 # Features
 <ol>
-  <li>Farm Input: This data includes the location of the Farm, crop type, farm size, soil type, stage of crop growth.</li>
+  <li>Farm Input: Input crucial farm data such as location, crop type, farm size, soil type, and crop growth stage for precise water management.</li>
   <li>Weather Data Fetch: Using the location data provided, Weather Agent will seek the data from the 7timer API response such as temperature, humidity and rainfall.</li>
   <li>Irrigation Measurements: The amount of water reuired by the plant is fixed but this can be fulfilled by two way: 1. Irrigation 2. Rainfall. The amount of water saved due to rainfall will be predicted in advance.</li>
-  <li>Pump Control: An important feature is that the Pump_Agent will get directions to irrigate such a time intervals and timer period for each irrigation step.</li>
+  <li>Pump Control: Control the irrigation pump efficiently by scheduling irrigation intervals and durations through the Pump Agent, ensuring precise water delivery to crops.</li>
 </ol>
 
 # Getting Started
-To run this project on another environment the agents address should be updated. There are 4 agents in this project.
-<ol>
-  <li>Weather Agent</li>
-  <li>Pump Agent</li>
-  <li>Decider Agent</li>
-  <li>User Agent</li>
-</ol>
-The addresses of the first 3 agents should be obtained and set in all the files where the addresses are store.
-e.g.
+To integrate our system into your environment, update the addresses of the four agents: Weather Agent, Pump Agent, Decider Agent, and User Agent. These addresses should be set in all relevant files where they are referenced. Obtain the address of any agent by accessing the respective agent's file and using the provided snippet.
 <code>
   PUMP_ADDRESS = "agent123...."
 </code>
@@ -27,3 +19,7 @@ e.g.
 <code>
   print(pump_agent.address) #for pump_agent
 </code>
+
+# Overview
+This project aims to solve the problem of water wastage at farms by using the weather forecast information such as amount of rainfall, humidity and temperature. This was possible because of the 7timer API for weather forecasting. This will take all the necessary information from the user and send to the decision agent which takes the decision that how much amount of water is fulfilled by rain and what should be irrigated for good nourishment of the crops. This projects leverages the uAgents library and uses its global communication channel Alamanac Contract.
+The final actuator is the irrigation pump which can be controlled by the pump_agent according to the instructions received my the decision_agent.
