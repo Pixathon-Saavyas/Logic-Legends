@@ -84,12 +84,20 @@ fund_agent_if_low(weather_agent.wallet.address())
 @weather_agent.on_message(model=QueryWeather)
 async def query_handler(ctx: Context,sender: str,msg: QueryWeather):
     query = f"http://www.7timer.info/bin/api.pl?lon={msg.lon}&lat={msg.lat}&product={msg.prod}&output=json"
-    ctx.logger.info(f"Received Weather Request From {sender} details: {query}")
-    ctx.logger.info(f"Processing Data......")
-    ctx.logger.info(f"Fetching weather information.....")
     data = fetch_json_from_api(query)
     final_obj = calculate_average(data['dataseries'])
-    ctx.logger.info(f"{final_obj}")
+    ctx.logger.info(f'''
+    ############################################################
+        Received Weather Request From decision agent
+        Processing Data......
+        Fetching weather information....
+        Fetch Completed
+        Details: Temperature:  {final_obj['temp2m']}
+                 Humidity: {final_obj['rh2m']}
+                 Rainfall: {final_obj['prec_amount']}
+    ############################################################
+        ''')
+
     await ctx.send(sender,WeatherData(farm_data=msg.farm_data,temperature=final_obj['temp2m'],humidity=final_obj['rh2m'],rainfall=final_obj['prec_amount']*100))
 
 if __name__ == "__main__":

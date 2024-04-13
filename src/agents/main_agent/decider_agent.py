@@ -128,27 +128,55 @@ fund_agent_if_low(decider_agent.wallet.address())
 
 @decider_agent.on_message(model=FarmData)
 async def farm_data_handler(ctx: Context, sender: str,fd: FarmData):
-    ctx.logger.info(f"Recieved farm data {fd} from {sender}")
+    ctx.logger.info(f'''
+    ###############################################################
+    Data received from user agent
+        City: {fd.city}
+        Crop Type: {fd.crop_type}
+        Farm Size: {fd.farm_size} 
+        Soil Type: {fd.soil_type} 
+        Stage of Growth: {fd.stage_of_growth} 
+        Crop Density: {fd.crop_density}
+        Soil Moisture: {fd.soil_moisture} 
+    ###############################################################
+        ''')
+
     ctx.logger.info("Fetching weather information from 7timer API via weather agent")
     city = fd.city
     await ctx.send(WEATHER_ADDRESS,QueryWeather(farm_data=fd,requester_address=sender,lon=cities[city]['lon'],lat=cities[city]['lat'],unit="Metric",prod="civil"))
 
 @decider_agent.on_message(model=WeatherData)
 async def weather_data_handler(ctx: Context,sender: str,wd: WeatherData):
-    ctx.logger.info(f"Received weather data {wd} from {sender}")
-    farm_data = wd.farm_data
-    required_water = sugarcane_water_required[farm_data.stage_of_growth]*farm_data.farm_size*farm_data.crop_density
-    rain_water = wd.rainfall*farm_data.farm_size*farm_data.crop_density
+    fd = wd.farm_data
+    ctx.logger.info(f'''
+    ###############################################################                 
+        Received weather data from Weather Agent
+            Temperature: {wd.temperature}
+            Rainfall: {wd.rainfall}
+            Humidity: {wd.humidity}
+        For the farm detailed below:
+            City: {fd.city}
+            Crop Type: {fd.crop_type}
+            Farm Size: {fd.farm_size} 
+            Soil Type: {fd.soil_type} 
+            Stage of Growth: {fd.stage_of_growth} 
+            Crop Density: {fd.crop_density}
+            Soil Moisture: {fd.soil_moisture} 
+    ###############################################################
+
+    ''')
+    required_water = sugarcane_water_required[fd.stage_of_growth]*fd.farm_size*fd.crop_density
+    rain_water = wd.rainfall*fd.farm_size*fd.crop_density
     pump_water = max(0,required_water-rain_water)
     routines = 0
     per = "day"
-    if(farm_data.soil_type=="sandy"):
+    if(fd.soil_type=="sandy"):
         routines = 4
-    if(farm_data.soil_type=="salty"):
+    if(fd.soil_type=="salty"):
         routines = 3
-    if(farm_data.soil_type=="loamy"):
+    if(fd.soil_type=="loamy"):
         routines = 2
-    if(farm_data.soil_type=="clayey"):
+    if(fd.soil_type=="clayey"):
         routines = 1
 
     await ctx.send(PUMP_ADDRESS,PumpingInformation(quantity=pump_water,routines=routines,per=per))

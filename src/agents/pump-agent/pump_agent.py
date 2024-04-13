@@ -21,9 +21,16 @@ fund_agent_if_low(pump_agent.wallet.address())
 
 @pump_agent.on_message(model=PumpingInformation)
 async def message_handler(ctx: Context, sender: str, msg: PumpingInformation):
-    ctx.logger.info(f"Received message from {sender}: {msg}")
-    await ctx.send(sender, Message(message="done"))
-
+    ctx.logger.info(f"Received pumping instruction from Decision Agent")
+    ctx.logger.info(
+        f'''
+    ##############################################################
+            Irrigation Instructions: 
+                Amount of water: {msg.quantity}
+                Intervals: {msg.routines} per {msg.per}
+    ##############################################################
+        ''' 
+    )
 if __name__ == "__main__":
     pump_agent.run()
 

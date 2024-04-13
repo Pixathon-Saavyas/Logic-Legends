@@ -19,6 +19,7 @@ e.g.
 <code>
   print(pump_agent.address) #for pump_agent
 </code>
+To execute the project run all the 4 python scripts in 4 different terminal (user.py at the end). Then add fill the input details asked in the user.py.
 
 # Overview
 This project aims to solve the problem of water wastage at farms by using the weather forecast information such as amount of rainfall, humidity and temperature. This was possible because of the 7timer API for weather forecasting. This will take all the necessary information from the user and send to the decision agent which takes the decision that how much amount of water is fulfilled by rain and what should be irrigated for good nourishment of the crops. This projects leverages the uAgents library and uses its global communication channel Alamanac Contract.
